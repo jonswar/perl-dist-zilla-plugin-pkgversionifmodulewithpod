@@ -31,4 +31,9 @@ In your L<Dist::Zilla> C<dist.ini>:
 
     [PkgVersionIfModuleWithPod]
 
+=head1 DESCRIPTION
+
+Like L<Dist::Zilla::Plugin::PkgVersion>, but only for .pm files with =pod
+sections.
+
 =cut
