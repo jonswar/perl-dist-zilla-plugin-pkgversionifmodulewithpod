@@ -1,12 +1,23 @@
 package Dist::Zilla::Plugin::PkgVersionIfModuleWithPod;
-use 5.008;
-use strict;
-use warnings;
+use Moose;
+extends qw/ Dist::Zilla::Plugin::PkgVersion /;
+
+around munge_perl => sub {
+    my $inner = shift;
+    my ( $self, $file ) = @_;
+
+    my $content = $file->content;
+
+    if ( $file->name =~ /\.pm/ && $content =~ /=pod/ ) {
+        return $inner->(@_);
+    }
+};
+
+__PACKAGE__->meta->make_immutable;
 
 1;
 
 __END__
-
 =pod
 
 =head1 NAME
@@ -16,27 +27,8 @@ with =pod sections
 
 =head1 SYNOPSIS
 
-    use Dist::Zilla::Plugin::PkgVersionIfModuleWithPod;
+In your L<Dist::Zilla> C<dist.ini>:
 
-=head1 DESCRIPTION
+    [PkgVersionIfModuleWithPod]
 
-Dist::Zilla::Plugin::PkgVersionIfModuleWithPod provides
-
-Questions and feedback are welcome, and should be directed to the mailing list:
-
-    http://groups.google.com/...
-
-Bugs and feature requests will be tracked at RT:
-
-    http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-Zilla-Plugin-PkgVersionIfModuleWithPod
-    bug-dist-zilla-plugin-pkgversionifmodulewithpod@rt.cpan.org
-
-The latest source code can be browsed and fetched at:
-
-    http://github.com/jonswar/perl-dist-zilla-plugin-pkgversionifmodulewithpod
-    git clone git://github.com/jonswar/perl-dist-zilla-plugin-pkgversionifmodulewithpod.git
-
-=head1 SEE ALSO
-
-L<Some::Module>
-
+=cut
